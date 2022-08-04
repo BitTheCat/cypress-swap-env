@@ -30,18 +30,24 @@ Minimist is require for swapEnv.js script
 npm i minimist
 ```
 
-1 - Copy the swapEnv.js file under the main Cypress folder.
+1 - Copy the __swapEnv.js__ file under the main Cypress folder.
 
-2 - Now copy the swapEnvModule.js file under the cypress/plugins/ folder.
+2 - Now copy the __swap-plugin.js__ file under the cypress/plugins/ folder.
 
 If you are using the index.js file under the plugins folder then follow the following otherwise go to step 3.b
 
 3.a - Once this is done, you need to edit the index.js file in the plugins folder like this:
 
-```
+```js
 const swapEnv = require('./swapEnvModule.js')
 
 module.exports = (on, config) => {
+    on('before:run', () => {
+        swapEnv.swap()
+    })
+    on('after:run', () => {
+        swapEnv.swap()
+    })
     on('task', {
         swapEnv,
     });
@@ -52,15 +58,22 @@ module.exports = (on, config) => {
 
 3.b - Let's open the cypress.config.js file and edit it by adding these lines inside e2e -> setupNodeEvents
 
-```
-on('task', {
-   swapEnv,
-});
+```js
+on('before:run', () => {
+        swapEnv.swap()
+    })
+    on('after:run', () => {
+        swapEnv.swap()
+    })
+    on('task', {
+        swapEnv,
+    });
+    return config
 ```
 
 4 - Now all we have to do is go and edit the e2e.js file under the cypress/support folder as follows
 
-```
+```js
 before(() => {
     cy.task('swapEnv.check', {}, { log: false });
 });
@@ -71,7 +84,7 @@ before(() => {
 
 Adding the npm script inside __package.js__ to start cypress with the env swap
 
-```
+```js
 "cypress": "node cypress/swapEnv.js --oneSwap=true && npx cypress open",
 ```
 
@@ -82,6 +95,11 @@ To run the command from the terminal, simply run the following code
 
 ```
 node cypress/swapEnv.js {args}
+```
+
+e.g. 
+```
+node cypress/swapEnv.js --oneSwap=true
 ```
 
 #### Script arguments

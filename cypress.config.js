@@ -1,4 +1,5 @@
 const { defineConfig } = require('cypress');
+const swapEnv = require('./cypress/plugins/swap-plugin.js')
 
 module.exports = defineConfig({
     projectId: 'YourProjectId',
@@ -6,12 +7,16 @@ module.exports = defineConfig({
 
     e2e: {
         setupNodeEvents(on, config) {
-            return require('./cypress/plugins/index.js')(on, config);
-            //OR if you don't use index.js under plugins just
-            //on('task', {
-            //    swapEnv,
-            //});
-            //return config
+            on('before:run', () => {
+                swapEnv.swap()
+            })
+            on('after:run', () => {
+                swapEnv.swap()
+            })
+            on('task', {
+                swapEnv
+            });
+            return config
         },
         baseUrl: 'YourBaseUrl',
         specPattern: 'cypress/e2e/**/*.{js,jsx,ts,tsx}',
