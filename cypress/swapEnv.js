@@ -20,6 +20,8 @@ function swap() {
     if(oneSwap) {
         if(!fs.existsSync('.env.backup')) {
             renameEnv(undefined, '.env.cypress')
+            console.info('Swap Done! Swap .env')
+            return
         }
         console.info('The oneSwap argument was set, swap not performed!')
         return
