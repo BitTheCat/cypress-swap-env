@@ -28,7 +28,7 @@ I you don't have cypress yet just install it
 npm install cypress --save-dev
 ```
 
-1 - Copy the __swapEnv.js__ file under the main Cypress folder.
+1 - Copy the __swap.js__ file under the main Cypress folder.
 
 2 - Now copy the __swap-plugin.js__ file under the cypress/plugins/ folder.
 
