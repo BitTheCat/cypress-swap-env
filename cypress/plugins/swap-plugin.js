@@ -3,27 +3,19 @@ let fs = require('fs');
 module.exports = {
     check()
     {
-        if (!fs.existsSync('.env.backup') || fs.existsSync('.env.cypress')) {
+        if (!fs.existsSync('.env.backup') && fs.existsSync('.env.cypress') && fs.existsSync('.env')) {
+            return true
+        } else if (!fs.existsSync('.env.cypress') && fs.existsSync('.env.backup') && fs.existsSync('.env')) {
+            return false
+        } else {
             throw new Error('***************************************\n' +
                 '   DANGER! Cannot found .env swap!\n' +
-                '   >> Run node cypress/swap.js\n' +
                 '*****************************************\n'
             )
         }
-        return null
     },
-    swap(oneSwap = false) {
+    swap() {
         let message = ''
-
-        if(oneSwap) {
-            if(!fs.existsSync('.env.backup')) {
-                renameEnv(undefined, '.env.cypress')
-                console.info('Swap Done! Swap .env')
-                return
-            }
-            console.info('The oneSwap argument was set, swap not performed!')
-            return
-        }
 
         if (fs.existsSync('.env.cypress')) {
             renameEnv(undefined, '.env.cypress')
@@ -32,7 +24,10 @@ module.exports = {
             renameEnv(undefined, '.env.cypress', undefined, true)
             message = 'Swap Done! Restore old .env'
         } else {
-            message = 'DANGER! Cannot found .env.cypress or .env.backup'
+            throw new Error('***************************************\n' +
+                '   DANGER! Cannot found .env.cypress or .env.backup\n' +
+                '*****************************************\n'
+            )
         }
 
         console.info(message)

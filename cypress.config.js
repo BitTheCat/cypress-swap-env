@@ -6,9 +6,12 @@ module.exports = defineConfig({
     //other config
 
     e2e: {
+        experimentalInteractiveRunEvents: true,
         setupNodeEvents(on, config) {
             on('before:run', () => {
-                swapEnv.swap()
+                if (swapEnv.check()) {
+                    swapEnv.swap()
+                }
             })
             on('after:run', () => {
                 swapEnv.swap()
