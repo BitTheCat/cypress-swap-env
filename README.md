@@ -72,7 +72,7 @@ before(() => {
 Adding the npm script inside __package.js__ to start cypress with the env swap
 
 ```
-"cypress": "node cypress/swapEnv.js --onceSwap=true && npx cypress open",
+"cypress": "node cypress/swapEnv.js --oneSwap=true && npx cypress open",
 ```
 
 ### Script
